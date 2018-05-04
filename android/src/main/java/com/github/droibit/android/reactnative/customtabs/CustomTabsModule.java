@@ -161,7 +161,7 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
         if (option.hasKey(KEY_CUSTOM_SHARE) && option.getBoolean(KEY_CUSTOM_SHARE)) {
             Bitmap icon = BitmapFactory.decodeResource(getReactApplicationContext().getResources(), android.R.drawable.ic_menu_share);
             PendingIntent pendingIntent = createPendingShareIntent(url);
-            builder.setActionButton(icon, "App Name", pendingIntent, true);
+            builder.setActionButton(icon, getReactApplicationContext().getApplicationContext().getPackageName(), pendingIntent, true);
         }
 
         // TODO: If it does not launch Chrome, animation is unnecessary?
