@@ -85,6 +85,16 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
      *
      * @param url the URL to open
      */
+
+     private PendingIntent createPendingShareIntent(String url) {
+        Intent actionIntent = new Intent(Intent.ACTION_SEND);
+        actionIntent.putExtra(Intent.EXTRA_TEXT, url);
+        actionIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        actionIntent.setType("text/plain");
+        return PendingIntent.getActivity(
+                getReactApplicationContext(), 0, actionIntent, 0);
+    }
+
     @ReactMethod
     public void openURL(String url, ReadableMap option, Promise promise) {
         if (TextUtils.isEmpty(url)) {
@@ -101,7 +111,8 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
             final CustomTabsIntent customTabsIntent = buildIntent(
                     getReactApplicationContext(),
                     new CustomTabsIntent.Builder(),
-                    option
+                    option,
+                    url
             );
             final Activity activity = getCurrentActivity();
             if (activity != null) {
@@ -122,7 +133,7 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
     @VisibleForTesting
     /* package */ CustomTabsIntent buildIntent(Context context,
                                                CustomTabsIntent.Builder builder,
-                                               ReadableMap option) {
+                                               ReadableMap option, String url) {
         if (option.hasKey(KEY_TOOLBAR_COLOR)) {
             final String colorString = option.getString(KEY_TOOLBAR_COLOR);
             try {
@@ -143,6 +154,10 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
                 option.getBoolean(KEY_DEFAULT_SHARE_MENU_ITEM)) {
             builder.addDefaultShareMenuItem();
         }
+
+        Bitmap icon = BitmapFactory.decodeResource(getReactApplicationContext().getResources(), android.R.drawable.ic_menu_share);
+        PendingIntent pendingIntent = createPendingShareIntent(url);
+        builder.setActionButton(icon, "App Name", pendingIntent, true);
 
         // TODO: If it does not launch Chrome, animation is unnecessary?
 
