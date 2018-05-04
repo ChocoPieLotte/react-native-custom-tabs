@@ -43,6 +43,8 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
     /* package */ static final String KEY_ANIMATIONS = "animations";
     @VisibleForTesting
     /* package */ static final String KEY_HEADERS = "headers";
+    @VisibleForTesting
+    /* package */ static final String KEY_CUSTOM_SHARE = "enableCustomShare";
 
     private static final Map<String, Object> CONSTANTS;
 
@@ -54,6 +56,7 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
         CONSTANTS.put(KEY_DEFAULT_SHARE_MENU_ITEM, KEY_DEFAULT_SHARE_MENU_ITEM);
         CONSTANTS.put(KEY_ANIMATIONS, KEY_ANIMATIONS);
         CONSTANTS.put(KEY_HEADERS, KEY_HEADERS);
+        CONSTANTS.put(KEY_CUSTOM_SHARE, KEY_CUSTOM_SHARE);
     }
 
     private static final String MODULE_NAME = "CustomTabsManager";
@@ -155,9 +158,11 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
             builder.addDefaultShareMenuItem();
         }
 
-        Bitmap icon = BitmapFactory.decodeResource(getReactApplicationContext().getResources(), android.R.drawable.ic_menu_share);
-        PendingIntent pendingIntent = createPendingShareIntent(url);
-        builder.setActionButton(icon, "App Name", pendingIntent, true);
+        if (option.hasKey(KEY_CUSTOM_SHARE) && option.getBoolean(KEY_CUSTOM_SHARE)) {
+            Bitmap icon = BitmapFactory.decodeResource(getReactApplicationContext().getResources(), android.R.drawable.ic_menu_share);
+            PendingIntent pendingIntent = createPendingShareIntent(url);
+            builder.setActionButton(icon, "App Name", pendingIntent, true);
+        }
 
         // TODO: If it does not launch Chrome, animation is unnecessary?
 
