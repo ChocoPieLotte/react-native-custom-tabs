@@ -92,6 +92,7 @@ CustomTabs.openURL(url, {
   enableUrlBarHiding: true,
   showPageTitle: true,
   enableDefaultShare: true,
+  enableCustomShare: true,
   // For value, specify only full qualifier or only resource name.
   // In the case of the resource name, the module complements the application package in java side.
   animations: {
