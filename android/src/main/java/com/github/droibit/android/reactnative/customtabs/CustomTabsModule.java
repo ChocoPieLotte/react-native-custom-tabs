@@ -164,6 +164,8 @@ public class CustomTabsModule extends ReactContextBaseJavaModule {
             builder.setActionButton(icon, getReactApplicationContext().getApplicationContext().getPackageName(), pendingIntent, true);
         }
 
+        builder.setCloseButtonIcon(BitmapFactory.decodeResource(getReactApplicationContext().getResources(), R.drawable.ic_arrow_back_white_24dp));
+
         // TODO: If it does not launch Chrome, animation is unnecessary?
 
         if (option.hasKey(KEY_ANIMATIONS)) {
